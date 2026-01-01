@@ -1,4 +1,4 @@
-# Logbook
+# Logbook (Still under development)
 
 A comprehensive logging package for Flutter applications, powered by SQLite.
 
