@@ -81,6 +81,27 @@ Organize your logs using `LogCategory`:
 - `LogCategory.ui`
 - `LogCategory.error`
 
+### HTTP Logging
+
+You can easily log HTTP requests and responses using `LogbookHttpClient`.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:mylogbook_flutter/mylogbook.dart';
+
+final client = LogbookHttpClient(inner: http.Client());
+
+try {
+  // Requests are automatically logged
+  final response = await client.get(Uri.parse('https://api.example.com/data'));
+  
+  // 4xx and 5xx responses are logged as info/warning by default in the current implementation,
+  // but exceptions during request are logged as errors.
+} catch (e) {
+  // Network errors are logged automatically by LogbookHttpClient
+}
+```
+
 ### Built-in Log Viewer
 
 Logbook comes with a built-in UI to view and filter logs.
