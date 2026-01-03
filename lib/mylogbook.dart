@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'src/database_helper.dart';
@@ -11,6 +12,7 @@ export 'src/log_entry.dart';
 export 'src/http_logs.dart';
 export 'src/log_retention.dart';
 export 'src/ui/logbook_log_view.dart';
+import 'src/ui/logbook_log_view.dart';
 
 /// A comprehensive logging package for Flutter applications.
 class MyLogbook {
@@ -240,5 +242,12 @@ class MyLogbook {
       print('Failed to export and share logs: $e');
       rethrow;
     }
+  }
+
+  /// Opens the built-in Log Viewer screen.
+  void openLogViewer(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const LogbookLogView()));
   }
 }

@@ -17,7 +17,7 @@ Add `mylogbook_flutter` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  mylogbook_flutter: ^0.0.1
+  mylogbook_flutter: ^0.0.2
 ```
 
 ## Usage
@@ -89,11 +89,7 @@ Logbook comes with a built-in UI to view and filter logs.
 import 'package:mylogbook_flutter/mylogbook.dart';
 
 // Navigate to the Log Viewer
-Navigator.of(context).push(
-  MaterialPageRoute(
-    builder: (context) => const LogbookLogView(),
-  ),
-);
+MyLogbook().openLogViewer(context);
 ```
 
 The Log Viewer supports filtering by:

@@ -210,11 +210,7 @@ class _LogbookExampleState extends State<LogbookExample> {
                     icon: const Icon(Icons.list_alt),
                     label: const Text('Open Log Viewer'),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LogbookLogView(),
-                        ),
-                      );
+                      _logger.openLogViewer(context);
                     },
                   ),
                 ),
