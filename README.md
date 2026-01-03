@@ -1,4 +1,4 @@
-# MyLogbook Flutter (Still under development)
+# MyLogbook Flutter
 
 A comprehensive logging package for Flutter applications, powered by SQLite.
 

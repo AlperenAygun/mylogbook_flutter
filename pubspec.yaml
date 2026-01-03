@@ -1,6 +1,6 @@
 name: mylogbook_flutter
 description: A comprehensive logging package for Flutter applications.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/AlperenAygun/mylogbook_flutter
 repository: https://github.com/AlperenAygun/mylogbook_flutter
 
@@ -19,12 +19,12 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
   sqflite: ^2.4.2
-  archive: ^3.4.9
-  share_plus: ^10.0.0
+  archive: ^4.0.7
+  share_plus: ^12.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
