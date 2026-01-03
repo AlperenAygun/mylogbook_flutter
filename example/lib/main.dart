@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

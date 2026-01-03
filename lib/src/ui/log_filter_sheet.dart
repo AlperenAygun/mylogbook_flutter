@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 
 class LogFilterSheet extends StatefulWidget {
   final DateTime? initialStartDate;

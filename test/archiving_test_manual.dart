@@ -2,7 +2,7 @@
 // Add it via: flutter pub add --dev sqflite_common_ffi
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 import 'package:mylogbook_flutter/src/database_helper.dart';
 
 void main() {

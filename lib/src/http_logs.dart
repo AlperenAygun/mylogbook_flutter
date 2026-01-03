@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 
 /// A wrapper around [http.Client] that logs requests and responses to [MyLogbook].
 class LogbookHttpClient extends http.BaseClient {

@@ -27,7 +27,7 @@ dependencies:
 Initialize the `Logbook` in your `main()` function before running the app.
 
 ```dart
-import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,7 +87,7 @@ You can easily log HTTP requests and responses using `LogbookHttpClient`.
 
 ```dart
 import 'package:http/http.dart' as http;
-import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 
 final client = LogbookHttpClient(inner: http.Client());
 

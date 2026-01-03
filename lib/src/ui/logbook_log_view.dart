@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 import 'log_filter_sheet.dart';
 
 class LogbookLogView extends StatefulWidget {

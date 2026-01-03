@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/mylogbook_flutter.dart';
 
 void main() {
   group('LogEntry', () {
