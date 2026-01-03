@@ -70,7 +70,7 @@ class _LogbookLogViewState extends State<LogbookLogView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Logbook'),
+        title: const Text('MyLogbook'),
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
