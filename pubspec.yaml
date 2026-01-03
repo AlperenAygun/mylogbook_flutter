@@ -4,6 +4,10 @@ version: 0.0.2
 homepage: https://github.com/AlperenAygun/mylogbook_flutter
 repository: https://github.com/AlperenAygun/mylogbook_flutter
 
+platforms:
+  android:
+  ios:
+
 environment:
   sdk: ^3.9.0
   flutter: ">=1.17.0"

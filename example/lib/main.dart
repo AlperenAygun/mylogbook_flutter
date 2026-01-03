@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mylogbook_flutter/mylogbook.dart';
@@ -7,8 +8,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize the Logbook
-  // Initialize the Logbook with default retention (Daily)
-  await MyLogbook().init(retention: LogRetention.daily);
+  // We enable archiving to show how logs can be moved to archive instead of deleted
+  await MyLogbook().init(
+    retention: LogRetention.daily, // Keep logs in main storage for 1 day
+    enableArchiving: true, // Move older logs to archive
+  );
 
   runApp(const MyApp());
 }
@@ -19,204 +23,257 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Logbook Example')),
-        body: const LogbookExample(),
+      title: 'Logbook Example',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.light,
+        ),
       ),
+      home: const LogbookDemoPage(),
     );
   }
 }
 
-class LogbookExample extends StatefulWidget {
-  const LogbookExample({super.key});
+class LogbookDemoPage extends StatefulWidget {
+  const LogbookDemoPage({super.key});
 
   @override
-  State<LogbookExample> createState() => _LogbookExampleState();
+  State<LogbookDemoPage> createState() => _LogbookDemoPageState();
 }
 
-class _LogbookExampleState extends State<LogbookExample> {
+class _LogbookDemoPageState extends State<LogbookDemoPage> {
   final _logger = MyLogbook();
-  List<LogEntry> _logs = [];
+  String _lastActionStatus = 'Ready';
 
-  @override
-  void initState() {
-    super.initState();
-    _refreshLogs();
-  }
-
-  Future<void> _refreshLogs() async {
-    final logs = await _logger.getLogs();
+  void _setStatus(String status) {
     if (mounted) {
-      setState(() {
-        _logs = logs;
-      });
+      setState(() => _lastActionStatus = status);
     }
   }
 
-  void _addLog(void Function() logAction) {
-    logAction();
-    _refreshLogs();
+  Future<void> _simulateNetworkRequest() async {
+    _setStatus('Simulating Network Request...');
+    _logger.info('Starting data fetch...', category: LogCategory.network);
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (Random().nextBool()) {
+      _logger.info('Data fetched successfully', category: LogCategory.network);
+      _setStatus('Network Request Success');
+    } else {
+      _logger.error(
+        'Failed to fetch data',
+        category: LogCategory.network,
+        error: 'TimeoutException: 404 Not Found',
+      );
+      _setStatus('Network Request Failed');
+    }
+  }
+
+  void _simulateDatabaseOp() {
+    _setStatus('Simulating DB Operation...');
+    _logger.warning(
+      'Database needs optimization',
+      category: LogCategory.database,
+    );
+    _setStatus('DB Warning Logged');
+  }
+
+  void _simulateUIError() {
+    try {
+      throw FormatException('Invalid number format');
+    } catch (e, stack) {
+      _logger.error(
+        'UI Parsing Error',
+        category: LogCategory.ui,
+        error: e,
+        stackTrace: stack,
+      );
+      _setStatus('UI Error Logged');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: _logs.isEmpty
-              ? const Center(child: Text('No logs found'))
-              : ListView.separated(
-                  itemCount: _logs.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1),
-                  itemBuilder: (context, index) {
-                    final log = _logs[index];
-                    Color color = Colors.black;
-                    if (log.level == LogLevel.warning) color = Colors.orange;
-                    if (log.level == LogLevel.error) color = Colors.red;
-
-                    return ListTile(
-                      dense: true,
-                      leading: Text(
-                        log.level.toString().split('.').last.toUpperCase(),
-                        style: TextStyle(
-                          color: color,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      title: Text(log.message),
-                      subtitle: Text(
-                        '[${log.category.name.toUpperCase()}] '
-                        '${log.timestamp.toIso8601String()}'
-                        '${log.error != null ? '\nError: ${log.error}' : ''}',
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                    );
-                  },
-                ),
-        ),
-        const Divider(thickness: 2),
-        Expanded(
-          flex: 1,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                const Text(
-                  'Controls',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 10,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () =>
-                          _addLog(() => _logger.info('Info message')),
-                      child: const Text('Info'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () =>
-                          _addLog(() => _logger.warning('Warning message')),
-                      child: const Text('Warning'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () =>
-                          _addLog(() => _logger.error('Error message')),
-                      child: const Text('Error'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 10,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade100,
-                      ),
-                      onPressed: () {
-                        try {
-                          throw Exception('Sync Exception');
-                        } catch (e) {
-                          // In a real app global handler catches this,
-                          // here we manually simulate just to show it works if caught
-                          _logger.error('Caught Sync Exception', error: e);
-                          _refreshLogs();
-                        }
-                      },
-                      child: const Text('Log Exception'),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade100,
-                      ),
-                      onPressed: () {
-                        // Throwing an exception without try-catch to test global error handling
-                        throw Exception('Uncaught UI Exception');
-                      },
-                      child: const Text('Throw UI Error'),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade100,
-                      ),
-                      onPressed: () async {
-                        final client = LogbookHttpClient();
-                        try {
-                          await client.get(
-                            Uri.parse(
-                              'https://jsonplaceholder.typicode.com/todos/1',
-                            ),
-                          );
-                        } finally {
-                          client.close();
-                          _refreshLogs();
-                        }
-                      },
-                      child: const Text('HTTP Request'),
-                    ),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Refresh'),
-                      onPressed: _refreshLogs,
-                    ),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.delete),
-                      label: const Text('Clear'),
-                      onPressed: () async {
-                        await _logger.clearLogs();
-                        _refreshLogs();
-                      },
-                    ),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.share),
-                      label: const Text('Share Logs'),
-                      onPressed: () async {
-                        await _logger.exportAndShareLogs();
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo.shade100,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    icon: const Icon(Icons.list_alt),
-                    label: const Text('Open Log Viewer'),
-                    onPressed: () {
-                      _logger.openLogViewer(context);
-                    },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Logbook Demo'),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _logger.openLogViewer(context),
+        icon: const Icon(Icons.history),
+        label: const Text('View Logs'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          // Status Card
+          Card(
+            color: Theme.of(context).colorScheme.surfaceVariant,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const Text(
+                    'Last Action Status',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    _lastActionStatus,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
+          const SizedBox(height: 24),
+
+          _buildSectionHeader('Log Categories'),
+          const SizedBox(height: 12),
+          _buildActionGrid(),
+
+          const SizedBox(height: 24),
+          _buildSectionHeader('Management'),
+          const SizedBox(height: 12),
+          _buildManagementList(context),
+
+          const SizedBox(height: 24),
+          const Text(
+            'Check the "View Logs" button to see the results.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Row(
+      children: [
+        Icon(
+          Icons.label_important,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisSpacing: 12,
+      mainAxisSpacing: 12,
+      childAspectRatio: 1.5,
+      children: [
+        _buildActionButton(
+          icon: Icons.wifi,
+          label: 'Network Log',
+          color: Colors.blue.shade100,
+          onTap: _simulateNetworkRequest,
+        ),
+        _buildActionButton(
+          icon: Icons.storage,
+          label: 'Database Log',
+          color: Colors.orange.shade100,
+          onTap: _simulateDatabaseOp,
+        ),
+        _buildActionButton(
+          icon: Icons.bug_report,
+          label: 'UI Error',
+          color: Colors.red.shade100,
+          onTap: _simulateUIError,
+        ),
+        _buildActionButton(
+          icon: Icons.info_outline,
+          label: 'General Info',
+          color: Colors.green.shade100,
+          onTap: () {
+            _logger.info(
+              'User opened the settings page',
+              category: LogCategory.ui,
+            );
+            _setStatus('Info Logged');
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: color,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 32, color: Colors.black87),
+            const SizedBox(height: 8),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildManagementList(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          tileColor: Colors.grey.shade100,
+          leading: const Icon(Icons.share),
+          title: const Text('Export & Share logs'),
+          subtitle: const Text('Share all current logs as a .txt file'),
+          onTap: () async {
+            _setStatus('Exporting...');
+            await _logger.exportAndShareLogs();
+            _setStatus('Export dialog closed');
+          },
+        ),
+        const SizedBox(height: 8),
+        ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          tileColor: Colors.grey.shade100,
+          leading: const Icon(Icons.delete_forever, color: Colors.red),
+          title: const Text('Clear All Logs'),
+          onTap: () async {
+            await _logger.clearLogs();
+            _setStatus('All logs cleared');
+            if (mounted) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Logs Cleared')));
+            }
+          },
         ),
       ],
     );
