@@ -1,16 +1,19 @@
 import 'package:http/http.dart' as http;
-import 'package:logbook/logbook.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
 
-/// A wrapper around [http.Client] that logs requests and responses to [Logbook].
+/// A wrapper around [http.Client] that logs requests and responses to [MyLogbook].
 class LogbookHttpClient extends http.BaseClient {
   final http.Client _inner;
+  final MyLogbook _logger;
 
-  LogbookHttpClient({http.Client? inner}) : _inner = inner ?? http.Client();
+  LogbookHttpClient({http.Client? inner, MyLogbook? logger})
+    : _inner = inner ?? http.Client(),
+      _logger = logger ?? MyLogbook();
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     final stopwatch = Stopwatch()..start();
-    final logbook = Logbook();
+    final logbook = _logger;
 
     try {
       // Log Request

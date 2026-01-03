@@ -1,8 +1,8 @@
-name: logbook
+name: mylogbook_flutter
 description: A comprehensive logging package for Flutter applications.
 version: 0.0.1
-homepage: https://github.com/AlperenAygun/logbook
-repository: https://github.com/AlperenAygun/logbook
+homepage: https://github.com/AlperenAygun/mylogbook_flutter
+repository: https://github.com/AlperenAygun/mylogbook_flutter
 
 environment:
   sdk: ^3.9.0

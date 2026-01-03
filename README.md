@@ -1,4 +1,4 @@
-# Logbook (Still under development)
+# MyLogbook Flutter (Still under development)
 
 A comprehensive logging package for Flutter applications, powered by SQLite.
 
@@ -13,11 +13,11 @@ A comprehensive logging package for Flutter applications, powered by SQLite.
 
 ## Getting Started
 
-Add `logbook` to your `pubspec.yaml`:
+Add `mylogbook_flutter` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  logbook: ^0.0.1
+  mylogbook_flutter: ^0.0.1
 ```
 
 ## Usage
@@ -27,14 +27,14 @@ dependencies:
 Initialize the `Logbook` in your `main()` function before running the app.
 
 ```dart
-import 'package:logbook/logbook.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize with optional retention policy (default is daily)
   // set enableArchiving: true to archive logs instead of deleting them
-  await Logbook().init(
+  await MyLogbook().init(
     retention: LogRetention.daily, 
     enableArchiving: false, 
   );
@@ -48,7 +48,7 @@ void main() async {
 Use the singleton instance to log messages.
 
 ```dart
-final logger = Logbook();
+final logger = MyLogbook();
 
 // Info log
 logger.info('User logged in');
@@ -86,7 +86,7 @@ Organize your logs using `LogCategory`:
 Logbook comes with a built-in UI to view and filter logs.
 
 ```dart
-import 'package:logbook/logbook.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
 
 // Navigate to the Log Viewer
 Navigator.of(context).push(
@@ -107,5 +107,5 @@ The Log Viewer supports filtering by:
 You can export the entire database as a zip file and share it (e.g., via Email, Slack, AirDrop).
 
 ```dart
-await Logbook().exportAndShareLogs();
+await MyLogbook().exportAndShareLogs();
 ```

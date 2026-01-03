@@ -2,8 +2,8 @@
 // Add it via: flutter pub add --dev sqflite_common_ffi
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logbook/logbook.dart';
-import 'package:logbook/src/database_helper.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
+import 'package:mylogbook_flutter/src/database_helper.dart';
 
 void main() {
   group('Archiving Feature', () {

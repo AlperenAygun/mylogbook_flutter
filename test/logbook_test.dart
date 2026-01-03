@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logbook/logbook.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
 
 void main() {
   group('LogEntry', () {
@@ -32,15 +32,15 @@ void main() {
     });
   });
 
-  group('Logbook', () {
+  group('MyLogbook', () {
     test('should be a singleton', () {
-      final logbook1 = Logbook();
-      final logbook2 = Logbook();
+      final logbook1 = MyLogbook();
+      final logbook2 = MyLogbook();
       expect(logbook1, same(logbook2));
     });
 
     test('should emit logs to stream', () async {
-      final logbook = Logbook();
+      final logbook = MyLogbook();
 
       expectLater(
         logbook.logStream.map((e) => e.message),

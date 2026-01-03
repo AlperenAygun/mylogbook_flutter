@@ -168,13 +168,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
-  logbook:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.1"
   matcher:
     dependency: transitive
     description:
@@ -207,6 +200,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  mylogbook_flutter:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   path:
     dependency: transitive
     description:

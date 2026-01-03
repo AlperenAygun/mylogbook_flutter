@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:logbook/logbook.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize the Logbook
   // Initialize the Logbook with default retention (Daily)
-  await Logbook().init(retention: LogRetention.daily);
+  await MyLogbook().init(retention: LogRetention.daily);
 
   runApp(const MyApp());
 }
@@ -35,7 +35,7 @@ class LogbookExample extends StatefulWidget {
 }
 
 class _LogbookExampleState extends State<LogbookExample> {
-  final _logger = Logbook();
+  final _logger = MyLogbook();
   List<LogEntry> _logs = [];
 
   @override

@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:logbook/logbook.dart';
+import 'package:mylogbook_flutter/mylogbook.dart';
 
 void main() {
   test('LogbookHttpClient logs request and response', () async {
-    final logbook = Logbook();
+    final logbook = MyLogbook();
     final logs = <LogEntry>[];
     final subscription = logbook.logStream.listen(logs.add);
 

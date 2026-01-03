@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../logbook.dart';
+import '../../mylogbook.dart';
 import 'log_filter_sheet.dart';
 
 class LogbookLogView extends StatefulWidget {
@@ -10,7 +10,7 @@ class LogbookLogView extends StatefulWidget {
 }
 
 class _LogbookLogViewState extends State<LogbookLogView> {
-  final _logbook = Logbook();
+  final _logbook = MyLogbook();
   List<LogEntry> _logs = [];
   bool _isLoading = true;
 

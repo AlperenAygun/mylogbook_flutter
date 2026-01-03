@@ -13,12 +13,12 @@ export 'src/log_retention.dart';
 export 'src/ui/logbook_log_view.dart';
 
 /// A comprehensive logging package for Flutter applications.
-class Logbook {
-  static final Logbook _instance = Logbook._internal();
+class MyLogbook {
+  static final MyLogbook _instance = MyLogbook._internal();
 
-  factory Logbook() => _instance;
+  factory MyLogbook() => _instance;
 
-  Logbook._internal();
+  MyLogbook._internal();
 
   final DatabaseHelper _databaseHelper = DatabaseHelper();
   final StreamController<LogEntry> _logStreamController =
@@ -45,12 +45,12 @@ class Logbook {
 
       _setupErrorHooks();
       info(
-        'Logbook initialized with SQLite. Retention: ${retention.name}, Archiving: $enableArchiving',
+        'MyLogbook initialized with SQLite. Retention: ${retention.name}, Archiving: $enableArchiving',
       );
     } catch (e, stack) {
       // Fallback logging if initialization fails
       // ignore: avoid_print
-      print('Failed to initialize Logbook: $e\n$stack');
+      print('Failed to initialize MyLogbook: $e\n$stack');
     }
   }
 
@@ -88,7 +88,7 @@ class Logbook {
         if (deletedCount > 0) {
           // ignore: avoid_print
           print(
-            'Logbook cleanup: archived $deletedCount logs older than $cutoff to $tableName',
+            'MyLogbook cleanup: archived $deletedCount logs older than $cutoff to $tableName',
           );
         }
       } else {
@@ -98,7 +98,7 @@ class Logbook {
           // but printing to console is fine for debug.
           // ignore: avoid_print
           print(
-            'Logbook cleanup: deleted $deletedCount logs older than $cutoff',
+            'MyLogbook cleanup: deleted $deletedCount logs older than $cutoff',
           );
         }
       }
